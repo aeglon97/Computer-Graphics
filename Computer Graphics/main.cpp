@@ -1,11 +1,17 @@
 #include <SFML/Graphics.hpp>
+#include <TGUI/TGUI.hpp>
 #include <iostream>
 #include <string>
 #include <vector>
+//#include <graphics.h>
 
 std::vector<sf::RectangleShape> rects;
+std::vector<sf::RectangleShape> lines;
 
-void put_pixel(sf::Vector2i pos) {
+int count = 0;
+
+void put_pixel(sf::Vector2i pos)
+{
 	sf::RectangleShape pixel{ {10, 10} };
 	pixel.setPosition(sf::Vector2f(pos));
 	pixel.setFillColor(sf::Color(255, 0, 0));
@@ -27,14 +33,66 @@ bool isPixelClicked(sf::RectangleShape pix, sf::Mouse::Button button, sf::Render
 	return false;
 }
 
+void change_color(sf::Vector2i pos, sf::Mouse::Button button, sf::RenderWindow &window)
+{
+	for (auto& r : rects)
+	{
+		if (isPixelClicked(r, button, window))
+		{
+			r.setFillColor(sf::Color(0, 255, 0));
+		}
+	}
+}
+
+void change_color(sf::RectangleShape clickedPixel)
+{
+	clickedPixel.setFillColor(sf::Color(0, 255, 0));
+}
+
+void drawLine(sf::RenderWindow &window, float x0, float y0, float x1, float y1)
+{
+	float dx, dy, error, x, y;
+	dx = x1 - x0;
+	dy = y1 - y0;
+
+	x = x0;
+	y = y0;
+
+	error = 2 * dy - dx;
+
+	while (x < x1)
+	{
+		if (error >= 0)
+		{
+			sf::Vertex line[] =
+			{
+				sf::Vertex(sf::Vector2f(x0, y0)),
+				sf::Vertex(sf::Vector2f(x1, y1))
+			};
+			y = y + 1;
+			error = error + 2 * dy - 2 * dx;
+			window.draw(line, 2, sf::Lines);
+		}
+		else
+		{
+			sf::Vertex line[] =
+			{
+				sf::Vertex(sf::Vector2f(x0, y0)),
+				sf::Vertex(sf::Vector2f(x1, y1))
+			};
+			error = error + 2 * dy;
+			window.draw(line, 2, sf::Lines);
+		}
+		x = x + 1;
+	}
+}
+
 int main() {
 	sf::RenderWindow window({ 1024, 769 }, "Hello World");
 
-	window.setFramerateLimit(30);
 	while (window.isOpen()) {
 		sf::Event event;
 
-		sf::Vector2i mouseDownPos;
 		while (window.pollEvent(event)) {
 			sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 			sf::Vertex line[2];
@@ -49,20 +107,14 @@ int main() {
 					put_pixel(mousePos);
 				}
 				else if (event.mouseButton.button == sf::Mouse::Right) {
-					//std::cout << mousePos.x << ", " << mousePos.y << std::endl;
-					sf::RectangleShape foundRect;
-					for (auto& r : rects)
-					{
-						bool yes = isPixelClicked(r, event.mouseButton.button, window);
-						if (yes)
-						{
-							r.setFillColor(sf::Color(0, 255, 0));
-						}
-					}
+					change_color(mousePos, event.mouseButton.button, window);
 				}
 			}
-			window.clear();
 		}
+		
+		window.clear();
+
+		drawLine(window, 100, 100, 400, 400);
 
 		for (auto& r : rects)
 		{
@@ -72,4 +124,4 @@ int main() {
 	}
 }
 
-
+//for next week, get all steps till 6 done
