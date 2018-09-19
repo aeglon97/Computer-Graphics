@@ -1,0 +1,30 @@
+﻿  main.cpp
+d:\graphics\computer graphics\computer graphics\main.cpp(22): warning C4551: function call missing argument list
+d:\graphics\computer graphics\computer graphics\main.cpp(25): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+          and
+          [
+              T=int
+          ]
+d:\graphics\computer graphics\computer graphics\main.cpp(24): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+          and
+          [
+              T=int
+          ]
+d:\graphics\computer graphics\computer graphics\main.cpp(24): warning C4244: 'argument': conversion from 'const T' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+          and
+          [
+              T=int
+          ]
+  Computer Graphics.vcxproj -> D:\Graphics\Computer Graphics\Debug\Computer Graphics.exe
